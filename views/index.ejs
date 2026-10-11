@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+
+<h2>Створення розсилки</h2>
+
+<% if (message) { %>
+    <div class="alert <%= message.includes('Помилка') ? 'alert-danger' : 'alert-success' %>">
+        <%= message %>
+    </div>
+<% } %>
+
+<form action="/send" method="POST">
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h4>Отримувачі (<%= subscribers.length %>)</h4>
+            <table class="table table-bordered table-sm mt-3">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center"><input type="checkbox" id="selectAll"></th>
+                        <th>ПІБ</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% subscribers.forEach(function(sub) { %>
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" name="selectedEmails" value="<%= sub.email %>" class="email-checkbox">
+                            </td>
+                            <td><%= sub.last_name %> <%= sub.first_name %> <%= sub.patronymic %></td>
+                            <td><%= sub.email %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Повідомлення</h4>
+            <div class="mb-3">
+                <label class="form-label">Виберіть шаблон:</label>
+                <select class="form-select" onchange="document.getElementById('msgText').value = this.value">
+                    <option value="">-- Написати свій текст --</option>
+                    <option value="Запрошуємо на важливу зустріч, яка відбудеться завтра.">Запрошення на зустріч</option>
+                    <option value="Ваші дані було успішно оновлено в системі.">Оновлення даних</option>
+                    <option value="Нагадуємо про термін сплати рахунку, який закінчується сьогодні.">Нагадування про оплату</option>
+                    <option value="Нагадуємо, що сьогодні о 15:00 відбудеться запланована онлайн-конференція. Посилання для підключення доступне у вашому кабінеті.">Нагадування про подію</option>
+                    <option value="Даруємо вам персональну знижку 20% на всі наші послуги! Пропозиція діє до кінця цього тижня.">Персональна знижка</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <textarea name="textMessage" id="msgText" class="form-control" rows="6" required placeholder="Введіть текст повідомлення..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Відправити обраним</button>
+        </div>
+    </div>
+</form>
+<script>
+    document.getElementById('selectAll').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.email-checkbox');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+</script>
+
+<%- include('partials/footer') %>

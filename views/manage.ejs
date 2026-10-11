@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+<h2>Керування адресами</h2>
+
+<div class="card my-4">
+    <div class="card-header">Додати нову адресу</div>
+    <div class="card-body">
+        <form action="/manage/add" method="POST" class="row g-3">
+            <div class="col-md-3"><input type="text" name="last_name" class="form-control" placeholder="Прізвище" required></div>
+            <div class="col-md-3"><input type="text" name="first_name" class="form-control" placeholder="Ім'я" required></div>
+            <div class="col-md-3"><input type="text" name="patronymic" class="form-control" placeholder="По батькові" required></div>
+            <div class="col-md-3"><input type="email" name="email" class="form-control" placeholder="Email" required></div>
+            <div class="col-12"><button type="submit" class="btn btn-success">Додати</button></div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover mt-4">
+    <thead class="table-dark">
+        <tr><th>Прізвище</th><th>Ім'я</th><th>По батькові</th><th>Email</th><th>Дії</th></tr>
+    </thead>
+    <tbody>
+        <% subscribers.forEach(function(sub) { %>
+            <tr>
+                <td><%= sub.last_name %></td>
+                <td><%= sub.first_name %></td>
+                <td><%= sub.patronymic %></td>
+                <td><%= sub.email %></td>
+                <td>
+                    <a href="/manage/edit/<%= sub.id %>" class="btn btn-sm btn-warning">Редагувати</a>
+                    <form action="/manage/delete/<%= sub.id %>" method="POST" class="d-inline" onsubmit="return confirm('Видалити?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+<%- include('partials/footer') %>
